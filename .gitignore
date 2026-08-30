@@ -1,0 +1,26 @@
+node_modules
+.next
+out
+.env*
+!.env.example
+.DS_Store
+npm-debug.log*
+*.tsbuildinfo
+__pycache__/
+*.py[cod]
+
+# The public portfolio repository contains application code only.
+/backstop.json
+/ui-forensics.config.json
+/backstop_data/
+/references/
+/tools/
+/scripts/
+/background-analysis/
+/responsive-analysis/
+/docs/
+.venv/
+
+# Local AI-agent instruction files are not part of the portfolio source.
+AGENTS.md
+CLAUDE.md
