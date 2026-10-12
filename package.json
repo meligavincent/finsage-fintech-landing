@@ -9,6 +9,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
+    "build:pages": "STATIC_EXPORT=true NEXT_PUBLIC_BASE_PATH=/finsage-fintech-landing next build",
+    "deploy:pages": "bash deployment/deploy-pages.sh",
     "start": "next start",
     "lint": "eslint ."
   },

@@ -10,7 +10,11 @@
 ![GSAP](https://img.shields.io/badge/GSAP-ScrollTrigger-0AE448?logo=greensock&logoColor=black)
 ![Tailwind CSS](https://img.shields.io/badge/Tailwind_CSS-4-06B6D4?logo=tailwindcss&logoColor=white)
 
-Responsive frontend engineering · motion design · CSS/SVG artwork · accessible interaction
+Responsive frontend engineering · motion design · CSS/SVG artwork
+
+**[Explore the live demo](https://meligavincent.github.io/finsage-fintech-landing/)** · [Run locally](#getting-started) · [Deploy to GitHub Pages](#github-pages-deployment)
+
+[![FinSage landing page preview](.github/assets/finsage-desktop.png)](https://meligavincent.github.io/finsage-fintech-landing/)
 
 </div>
 
@@ -45,7 +49,7 @@ A persistent chapter indicator follows the desktop journey and communicates the 
 - Custom SVG constructions animated independently on pointer interaction.
 - Responsive geometry based on container units, fluid spacing, and breakpoint-specific composition.
 - A horizontal learning rail that remains usable on touch screens.
-- A generated low-frequency gradient plate used as the atmospheric Hero background.
+- A layered CSS gradient model that scales the atmospheric Hero background without distortion.
 - Self-hosted Lato typography through `@fontsource/lato`.
 - Reduced-motion support that keeps every section visible and readable.
 - Semantic section boundaries and reusable visual primitives.
@@ -84,7 +88,9 @@ components/
 lib/
   motion/                       GSAP registration and motion-mode detection
 
-public/generated/               runtime background plate
+public/generated/               background study asset
+deployment/                     static publication script
+.github/assets/                 README screenshots
 ```
 
 `app/page.tsx` remains intentionally simple: it assembles the sections and mounts one motion controller. Each visual chapter owns its markup and responsive layout, while `LandingMotionController` coordinates scroll state without mixing animation timelines into the server-rendered section components.
@@ -102,6 +108,13 @@ Desktop-only sequences are registered through GSAP media queries. Smaller screen
 Hover choreography is enabled only for devices that actually support hover and fine pointers. Timelines are cleaned up when the controller unmounts, and decorative SVG elements return to their original geometry on pointer leave.
 
 ## Responsive strategy
+
+<details>
+<summary>View the mobile homepage</summary>
+
+<img src=".github/assets/finsage-mobile.png" alt="FinSage homepage at a 390px mobile viewport" width="280" />
+
+</details>
 
 The project does not force every section into one generic wrapper. Each chapter uses the layout model that best supports its content:
 
@@ -144,7 +157,9 @@ Open [http://localhost:3000](http://localhost:3000).
 pnpm dev      # start the development server
 pnpm lint     # run ESLint
 pnpm build    # create the production build
-pnpm start    # serve the production build
+pnpm start    # serve the standard Next.js production build
+pnpm build:pages   # export a static site for the GitHub Pages project path
+pnpm deploy:pages  # lint, export, and push compiled files to gh-pages
 ```
 
 ## Production check
@@ -157,6 +172,45 @@ pnpm build
 ```
 
 The application has no required environment variables. A fresh clone can be installed and built without external credentials or services.
+
+## GitHub Pages deployment
+
+The public demo is hosted at **[meligavincent.github.io/finsage-fintech-landing](https://meligavincent.github.io/finsage-fintech-landing/)**.
+
+Pages uses **Deploy from a branch** (`build_type: legacy`), with `gh-pages` and `/` as the publishing source. Next.js runs at build time; visitors receive static HTML, CSS, JavaScript, and self-hosted fonts.
+
+```text
+main (source) → pnpm build:pages → out/ → gh-pages → GitHub Pages
+```
+
+The export sets `output: "export"`, `trailingSlash: true`, and the build-time base path `/finsage-fintech-landing`. A `.nojekyll` marker preserves the `_next` assets. The regular `pnpm dev`, `pnpm build`, and `pnpm start` commands keep their standard Next.js behavior.
+
+### Publish an update
+
+With Node.js, pnpm, Git, and the [GitHub CLI](https://cli.github.com/) installed, authenticate `gh` with repository write access, then run:
+
+```bash
+# Commit your source changes on main first.
+git push origin main
+pnpm deploy:pages
+```
+
+The script lints and builds the application, copies only the export into a temporary checkout, and pushes a new commit to `gh-pages` while retaining its history. It records the source commit in `deployment.json`. Publication is manual; pushing `main` alone does not update the demo.
+
+In **Settings → Pages**, the source must be **Deploy from a branch → gh-pages → / (root)**. GitHub completes publication after the branch push; check the Pages deployment status before considering an update live. See [GitHub's publishing-source documentation](https://docs.github.com/en/pages/getting-started-with-github-pages/configuring-a-publishing-source-for-your-github-pages-site).
+
+### Preview the export locally
+
+The exported site expects the repository prefix. Serve it from a parent directory with that name (Python 3 and a POSIX shell):
+
+```bash
+pnpm build:pages
+preview_dir="$(mktemp -d)"
+ln -s "$PWD/out" "$preview_dir/finsage-fintech-landing"
+python3 -m http.server 8080 --directory "$preview_dir"
+```
+
+Open [http://localhost:8080/finsage-fintech-landing/](http://localhost:8080/finsage-fintech-landing/). Static output is served by a file server; use `pnpm start` for the standard Next.js build instead.
 
 ## Current scope
 
