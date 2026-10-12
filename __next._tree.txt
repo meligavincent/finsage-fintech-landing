@@ -1,0 +1,4 @@
+:HL["/finsage-fintech-landing/_next/static/chunks/3lnezf3u8to1g.css","style"]
+:HC["/",""]
+:HL["/finsage-fintech-landing/_next/static/chunks/25yihvypgh2op.css","style"]
+0:{"tree":{"name":"","param":null,"prefetchHints":4176,"slots":{"children":{"name":"__PAGE__","param":null,"prefetchHints":4256,"slots":null}}},"staleTime":300,"buildId":"8pqM4qWu3fhHNOGloC0QN"}
